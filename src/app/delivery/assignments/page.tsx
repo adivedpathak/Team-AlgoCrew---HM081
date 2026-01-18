@@ -40,20 +40,27 @@ export default function DeliveryAssignmentsPage() {
         }
     }
 
-    const simulateLocationUpdate = async (id: string) => {
-        // Mock moving somewhere in Kathmandu
-        const lat = 27.7172 + (Math.random() * 0.01 - 0.005)
-        const lng = 85.3240 + (Math.random() * 0.01 - 0.005)
-
-        try {
-            await fetch(`/api/delivery/assignments/${id}/location`, {
-                method: 'PUT',
-                body: JSON.stringify({ lat, lng })
-            })
-            toast.success('Location updated (Simulated)')
-        } catch (e) {
-            toast.error('Failed')
+    const updateLocation = async (id: string) => {
+        if (!navigator.geolocation) {
+            toast.error('Geolocation is not supported by your browser')
+            return
         }
+
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude: lat, longitude: lng } = position.coords
+            try {
+                await fetch(`/api/delivery/assignments/${id}/location`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ lat, lng })
+                })
+                toast.success('Location updated (Realtime)')
+            } catch (e) {
+                toast.error('Failed to update location')
+            }
+        }, (error) => {
+            console.error(error)
+            toast.error('Unable to retrieve location')
+        })
     }
 
     if (loading) return <div className="p-8">Loading...</div>
@@ -84,7 +91,7 @@ export default function DeliveryAssignmentsPage() {
                                 )}
                                 {a.status === 'IN_TRANSIT' && (
                                     <>
-                                        <Button onClick={() => simulateLocationUpdate(a.id)} variant="outline">Update Location</Button>
+                                        <Button onClick={() => updateLocation(a.id)} variant="outline">Update Location</Button>
                                         <Button onClick={() => updateStatus(a.id, 'DELIVERED')} variant="default">Complete Delivery</Button>
                                     </>
                                 )}
