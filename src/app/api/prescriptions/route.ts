@@ -56,3 +56,18 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: false, error: 'Upload failed' }, { status: 500 })
     }
 }
+
+export async function GET(request: Request) {
+    const session = await getSession()
+    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    try {
+        const prescriptions = await prisma.prescription.findMany({
+            where: { customerId: session.userId },
+            orderBy: { createdAt: 'desc' }
+        })
+        return NextResponse.json({ success: true, data: prescriptions })
+    } catch (error) {
+        return NextResponse.json({ success: false, error: 'Failed' }, { status: 500 })
+    }
+}

@@ -10,7 +10,7 @@ import { format } from 'date-fns'
 
 export default function PharmacistOrdersPage() {
     const [orders, setOrders] = useState<any[]>([])
-    const [deliveryPeople] = useState([{ id: 'mock-dp-1', name: 'John Driver' }]) // Mock
+    const [deliveryPeople, setDeliveryPeople] = useState<any[]>([]) // Mock initialized empty, fetch later
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -19,9 +19,16 @@ export default function PharmacistOrdersPage() {
 
     const fetchOrders = async () => {
         try {
-            const res = await fetch('/api/orders?all=true') // Need to update API to allow 'all' for pharmacists
-            const json = await res.json()
-            if (json.success) setOrders(json.data)
+            const [ordersRes, driversRes] = await Promise.all([
+                fetch('/api/orders?all=true'),
+                fetch('/api/users?role=DELIVERY')
+            ])
+
+            const ordersJson = await ordersRes.json()
+            const driversJson = await driversRes.json()
+
+            if (ordersJson.success) setOrders(ordersJson.data)
+            if (driversJson.success) setDeliveryPeople(driversJson.data)
         } finally {
             setLoading(false)
         }
@@ -40,6 +47,24 @@ export default function PharmacistOrdersPage() {
             }
         } catch (e) {
             toast.error('Failed to update')
+        }
+    }
+
+    const assignDriver = async (orderId: string, deliveryPersonId: string) => {
+        try {
+            const res = await fetch(`/api/orders/${orderId}/assign`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ deliveryPersonId })
+            })
+            if (res.ok) {
+                toast.success('Driver assigned')
+                fetchOrders()
+            } else {
+                toast.error('Failed to assign')
+            }
+        } catch (e) {
+            toast.error('Error')
         }
     }
 
@@ -78,7 +103,7 @@ export default function PharmacistOrdersPage() {
                                     <div className="flex gap-2 items-center">
                                         <Select onValueChange={(val) => {
                                             // Assign delivery API call here
-                                            updateStatus(order.id, 'OUT_FOR_DELIVERY')
+                                            assignDriver(order.id, val)
                                         }}>
                                             <SelectTrigger className="w-[180px]">
                                                 <SelectValue placeholder="Assign Delivery" />

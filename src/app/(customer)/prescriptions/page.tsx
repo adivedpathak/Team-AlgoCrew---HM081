@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -13,8 +13,19 @@ export default function PrescriptionsPage() {
     const [uploading, setUploading] = useState(false)
     const [prescriptions, setPrescriptions] = useState<any[]>([])
 
-    // Load prescriptions on mount
-    // Skipping simplified fetch for brevity in this turn, assuming list is similar to orders
+    const fetchPrescriptions = async () => {
+        try {
+            const res = await fetch('/api/prescriptions')
+            const json = await res.json()
+            if (json.success) setPrescriptions(json.data)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchPrescriptions()
+    }, [])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -76,8 +87,26 @@ export default function PrescriptionsPage() {
 
             <div className="space-y-4">
                 <h2 className="text-xl font-semibold">History</h2>
-                {/* List would go here */}
-                <p className="text-gray-500">No previous uploads found.</p>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {prescriptions.map(p => (
+                        <Card key={p.id}>
+                            <CardHeader>
+                                <div className="flex justify-between">
+                                    <span className="text-sm text-gray-500">{new Date(p.createdAt).toLocaleDateString()}</span>
+                                    <Badge variant={p.status === 'VERIFIED' ? 'default' : p.status === 'REJECTED' ? 'destructive' : 'secondary'}>
+                                        {p.status}
+                                    </Badge>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={p.imageUrl} alt="Prescription" className="w-full h-32 object-cover rounded bg-gray-100" />
+                                {p.notes && <p className="mt-2 text-sm text-red-500">Note: {p.notes}</p>}
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+                {prescriptions.length === 0 && <p className="text-gray-500">No previous uploads found.</p>}
             </div>
         </div>
     )
