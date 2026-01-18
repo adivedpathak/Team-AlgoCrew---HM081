@@ -36,28 +36,31 @@ MediFlow is a full-stack web platform designed to streamline the entire pharmacy
 Here are some screenshots showcasing the MediFlow platform:
 
 **🔹 Home Page**
-<!-- Add screenshot: ![Home Page](path/to/home-screenshot.png) -->
+<img width="1438" height="813" alt="image" src="https://github.com/user-attachments/assets/00777131-0eb0-40f4-ae2e-37443965d3ba" />
 
 **🔹 Customer Dashboard**
-<!-- Add screenshot: ![Customer Dashboard](path/to/customer-dashboard.png) -->
+<img width="1440" height="781" alt="image" src="https://github.com/user-attachments/assets/f36d3a2d-23d5-44f8-afab-5394ae06b921" />
 
 **🔹 Medicine Catalog**
-<!-- Add screenshot: ![Medicine Catalog](path/to/medicines-page.png) -->
+<img width="1440" height="780" alt="image" src="https://github.com/user-attachments/assets/f35deef1-d464-4880-8bbd-cb592c148468" />
 
 **🔹 Prescription Upload**
-<!-- Add screenshot: ![Prescription Upload](path/to/prescription-upload.png) -->
+<img width="1440" height="780" alt="image" src="https://github.com/user-attachments/assets/c765b34f-83e8-40d0-9aaf-8a8ec08602d5" />
 
 **🔹 Pharmacist Dashboard**
-<!-- Add screenshot: ![Pharmacist Dashboard](path/to/pharmacist-dashboard.png) -->
+<img width="1440" height="779" alt="image" src="https://github.com/user-attachments/assets/ad5a14b5-ac32-4932-b7cf-fbcbfb52b7ab" />
 
 **🔹 Order Management**
-<!-- Add screenshot: ![Order Management](path/to/order-management.png) -->
+<img width="1440" height="780" alt="image" src="https://github.com/user-attachments/assets/f5d3f9ad-f392-4652-a23b-5c3abf4367b4" />
+<img width="1440" height="779" alt="image" src="https://github.com/user-attachments/assets/a1c225e0-03d9-44dc-ab5f-535e188729d4" />
 
 **🔹 Real-Time Delivery Tracking**
-<!-- Add screenshot: ![Delivery Tracking](path/to/delivery-tracking.png) -->
+<img width="1440" height="778" alt="image" src="https://github.com/user-attachments/assets/a18a32da-14f8-4796-9b3a-85d1899267a6" />
+<img width="1440" height="779" alt="image" src="https://github.com/user-attachments/assets/7fac573e-4313-49ea-a341-38a1dcca60c4" />
+
 
 **🔹 Delivery Personnel Dashboard**
-<!-- Add screenshot: ![Delivery Dashboard](path/to/delivery-dashboard.png) -->
+<img width="1440" height="778" alt="image" src="https://github.com/user-attachments/assets/d0810a1d-25e9-470f-bc0b-1484566bde47" />
 
 ---
 
