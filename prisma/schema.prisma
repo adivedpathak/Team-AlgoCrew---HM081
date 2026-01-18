@@ -1,0 +1,154 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CUSTOMER
+  PHARMACIST
+  DELIVERY
+}
+
+enum PrescriptionStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  READY
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+enum DeliveryStatus {
+  ASSIGNED
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  role      Role     @default(CUSTOMER)
+  address   Json?
+  createdAt DateTime @default(now())
+
+  // Relations
+  prescriptions     Prescription[]
+  orders            Order[]
+  assignedDeliveries Delivery[]
+  refillProfiles    RefillProfile[]
+  verifiedPrescriptions Prescription[] @relation("VerifiedBy")
+}
+
+model Medicine {
+  id                   String   @id @default(uuid())
+  name                 String
+  genericName          String?
+  manufacturer         String?
+  category             String
+  description          String?
+  price                Decimal
+  requiresPrescription Boolean  @default(false)
+  image                String?
+  createdAt            DateTime @default(now())
+
+  // Relations
+  inventory  Inventory[]
+  orderItems OrderItem[]
+}
+
+model Inventory {
+  id           String   @id @default(uuid())
+  medicineId   String
+  medicine     Medicine @relation(fields: [medicineId], references: [id])
+  batchNumber  String
+  quantity     Int
+  expiryDate   DateTime
+  reorderLevel Int
+  createdAt    DateTime @default(now())
+}
+
+model Prescription {
+  id         String             @id @default(uuid())
+  customerId String
+  customer   User               @relation(fields: [customerId], references: [id])
+  imageUrl   String
+  status     PrescriptionStatus @default(PENDING)
+  verifiedBy String?
+  verifier   User?              @relation("VerifiedBy", fields: [verifiedBy], references: [id])
+  notes      String?
+  createdAt  DateTime           @default(now())
+
+  // Relations
+  orders Order[]
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  orderNumber     String        @unique
+  customerId      String
+  customer        User          @relation(fields: [customerId], references: [id])
+  prescriptionId  String?
+  prescription    Prescription? @relation(fields: [prescriptionId], references: [id])
+  status          OrderStatus   @default(PENDING)
+  totalAmount     Decimal
+  paymentStatus   PaymentStatus @default(PENDING)
+  deliveryAddress Json
+  createdAt       DateTime      @default(now())
+
+  // Relations
+  orderItems OrderItem[]
+  delivery   Delivery?
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id])
+  medicineId String
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+  quantity   Int
+  unitPrice  Decimal
+}
+
+model Delivery {
+  id               String         @id @default(uuid())
+  orderId          String         @unique
+  order            Order          @relation(fields: [orderId], references: [id])
+  deliveryPersonId String
+  deliveryPerson   User           @relation(fields: [deliveryPersonId], references: [id])
+  status           DeliveryStatus @default(ASSIGNED)
+  currentLocation  Json?
+  createdAt        DateTime       @default(now())
+}
+
+model RefillProfile {
+  id             String   @id @default(uuid())
+  customerId     String
+  customer       User     @relation(fields: [customerId], references: [id])
+  name           String
+  medicines      Json
+  frequency      Int // in days
+  nextRefillDate DateTime
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+}
