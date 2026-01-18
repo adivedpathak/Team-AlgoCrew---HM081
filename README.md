@@ -61,14 +61,14 @@ Here are some screenshots showcasing the MediFlow platform:
 
 ---
 
-## **🌍 Deployed URL**
-🔗 **[Access the Live Platform](#)**
+## 🌍 Deployed URL
+🔗 **[Access the Live Platform](https://algocrew.vercel.app/)**
 <!-- Add your deployed URL here -->
 
 ---
 
 ## 🎥 Demo Video
-📽️ [Watch the Demo](https://algocrew.vercel.app/)
+📽️ [Watch the Demo]()
 
 <!-- Add your demo video URL here -->
 
