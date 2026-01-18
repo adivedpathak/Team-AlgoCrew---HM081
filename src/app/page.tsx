@@ -1,24 +1,12 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Pill, Truck, Activity, ShieldCheck } from 'lucide-react'
+import { Truck, Activity, ShieldCheck } from 'lucide-react'
+import { LandingHeader } from '@/components/landing-header'
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white/50 backdrop-blur-md sticky top-0 z-50">
-        <Link className="flex items-center justify-center font-bold text-xl text-primary gap-2" href="#">
-          <Pill className="h-6 w-6" />
-          <span>MediFlow</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:text-primary transition-colors hover:underline underline-offset-4" href="/login">
-            Login
-          </Link>
-          <Link className="text-sm font-medium hover:text-primary transition-colors hover:underline underline-offset-4" href="/register">
-            Register
-          </Link>
-        </nav>
-      </header>
+      <LandingHeader />
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-teal-50 to-white dark:from-slate-900 dark:to-slate-950">
           <div className="container px-4 md:px-6">
@@ -34,14 +22,14 @@ export default function Home() {
                   Connect with certified pharmacists, manage prescriptions, and track your medicine delivery in real-time. Professional healthcare at your fingertips.
                 </p>
               </div>
-              <div className="space-x-4 pt-4">
-                <Link href="/register">
-                  <Button className="h-12 px-8 text-lg rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto justify-center">
+                <Link href="/register" className="w-full sm:w-auto">
+                  <Button className="w-full sm:w-auto h-12 px-8 text-lg rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
                     Get Started
                   </Button>
                 </Link>
-                <Link href="/medicines">
-                  <Button variant="outline" className="h-12 px-8 text-lg rounded-full border-2">
+                <Link href="/medicines" className="w-full sm:w-auto">
+                  <Button variant="outline" className="w-full sm:w-auto h-12 px-8 text-lg rounded-full border-2">
                     Browse Medicines
                   </Button>
                 </Link>
