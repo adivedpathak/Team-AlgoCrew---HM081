@@ -21,9 +21,14 @@ export default function CustomerDashboard() {
     const [user, setUser] = useState<any>(null)
     const [orders, setOrders] = useState<any[]>([])
 
+    const [refillCount, setRefillCount] = useState(0)
+    const [prescriptionCount, setPrescriptionCount] = useState(0)
+
     useEffect(() => {
         fetch('/api/auth/me').then(r => r.json()).then(d => d.success && setUser(d.data))
         fetch('/api/orders').then(r => r.json()).then(d => d.success && setOrders(d.data.slice(0, 3)))
+        fetch('/api/refill-profiles').then(r => r.json()).then(d => d.success && setRefillCount(d.data.length))
+        fetch('/api/prescriptions').then(r => r.json()).then(d => d.success && setPrescriptionCount(d.data.filter((p: any) => p.status === 'VERIFIED').length))
     }, [])
 
     if (!user) return <div className="p-8">Loading...</div>
@@ -54,7 +59,7 @@ export default function CustomerDashboard() {
                         <RefreshCw className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">2</div>
+                        <div className="text-2xl font-bold">{refillCount}</div>
                         <p className="text-xs text-muted-foreground">Active recurring</p>
                     </CardContent>
                 </Card>
@@ -64,7 +69,7 @@ export default function CustomerDashboard() {
                         <FileText className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">5</div>
+                        <div className="text-2xl font-bold">{prescriptionCount}</div>
                         <p className="text-xs text-muted-foreground">Verified total</p>
                     </CardContent>
                 </Card>

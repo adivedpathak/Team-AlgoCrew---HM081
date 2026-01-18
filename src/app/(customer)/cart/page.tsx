@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useRouter } from 'next/navigation'
-import { Trash2 } from 'lucide-react'
+import { Trash2, MapPin } from 'lucide-react'
 import { toast } from 'sonner'
 import { useState } from 'react'
 
@@ -120,6 +120,21 @@ export default function CartPage() {
                         <CardTitle>Delivery Address</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
+                        <div className="flex justify-end">
+                            <Button variant="outline" size="sm" onClick={() => {
+                                if (!navigator.geolocation) return toast.error('Geolocation not supported')
+                                navigator.geolocation.getCurrentPosition(
+                                    () => {
+                                        // For now, we mock reverse geocoding as we don't have a Google Maps API key
+                                        setAddress({ city: 'Kathmandu (Detected)', street: 'Current Location' })
+                                        toast.success('Location detected')
+                                    },
+                                    () => toast.error('Location access denied')
+                                )
+                            }}>
+                                <MapPin className="mr-2 h-4 w-4" /> Use Current Location
+                            </Button>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">City</label>

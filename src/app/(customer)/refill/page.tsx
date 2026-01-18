@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,16 +8,23 @@ import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function RefillPage() {
     const [profiles, setProfiles] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [medicines, setMedicines] = useState<any[]>([])
 
     // Form State
     const [name, setName] = useState('')
     const [meds, setMeds] = useState('')
     const [freq, setFreq] = useState('30')
     const [date, setDate] = useState('')
+
+    useEffect(() => {
+        fetch('/api/medicines?all=true').then(r => r.json()).then(d => d.success && setMedicines(d.data))
+        fetchProfiles()
+    }, [])
 
     const fetchProfiles = async () => {
         try {
@@ -28,10 +35,6 @@ export default function RefillPage() {
             setLoading(false)
         }
     }
-
-    useEffect(() => {
-        fetchProfiles()
-    }, [])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -97,8 +100,17 @@ export default function RefillPage() {
                                 <Input value={name} onChange={e => setName(e.target.value)} placeholder="My Diabetes Meds" required />
                             </div>
                             <div className="space-y-2">
-                                <Label>Medicine Name</Label>
-                                <Input value={meds} onChange={e => setMeds(e.target.value)} placeholder="Metformin" required />
+                                <Label>Select Medicine</Label>
+                                <Select value={meds} onValueChange={setMeds} required>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select medicine..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {medicines.map(m => (
+                                            <SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="space-y-2">
                                 <Label>Frequency (Days)</Label>
