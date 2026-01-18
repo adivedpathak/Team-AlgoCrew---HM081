@@ -68,7 +68,7 @@ Here are some screenshots showcasing the MediFlow platform:
 ---
 
 ## **🎥 Demo Video**
-📽️ **[Watch the Demo](#)**
+📽️ **[Watch the Demo](https://algocrew.vercel.app/)**
 <!-- Add your demo video URL here -->
 
 ---
