@@ -174,10 +174,10 @@ Here are some screenshots showcasing the MediFlow platform:
    Navigate to `http://localhost:3000`
 
 8. **Credentials for Testing**
-   **- Pharmacist:** pharmacist@mediflow.com
-   ** - Delivery driver:** driver@mediflow.com
-   **- Customer:** john@example.com
-   **- All with password:** password123
+  - Pharmacist: pharmacist@mediflow.com
+  - Delivery driver: driver@mediflow.com
+  - Customer: john@example.com
+  - (All with password: password123)
 
 ---
 
